@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: GHPI7mcGZyppNMMtoF/194Uq+Nzug4nwBSHamufGpuGa+5GHKBvWOsNpr2RP9ZcvWaVjx2yE9gr47efPZ9gbYFRarnbuZvXYDem4CpxOlpJNPStUOP8jEq0mzsfgchCqnPsHB4OfJgUnkj46JsfMEElRqY9r8ddgHFK+PDy/vUlGOeyIwMhjx8FdHehooCLW5OpraVOkg+XD93IGEIFwA/9fgsjoFRgCbye0JTeUKdNiweiwaCFQ+HUcfnaPJcpha9pw4Kgesr3amwVDoqViX0ljEByMSa60BRY8ovU2dw0lMcpTwLBEqHVPLd15rdpqanQf+H5VW39dBj0HjlgjzTd+YK7zHA/M86vDENY4dJvsQEgzFbbDCBdNzyCS33Fh1dsKKCrMXELWgt98rA8lLGIIRxyRat50OGjcUX+m07Zvb+jcI1Ex/iiu/CDpOmwVSBsOZGLo77ulbYE4Rnh3UgPf3QJtNV1qHXB3PtzBYmrdO+dm6+M0N7cNPwS3CauIJ1NFPRcPzT4mFtk/Ye3kWV49s+n5OAau2lHy1e1j39zmcWdQ7w2wlgxsd22glYymDMiqM3RDgJ1JHk7L9cUqLwXULPSfT4JICoCNH8Wk3N1X9AaQ5kkGoH8x3XFPCNYKdSWMWYEMdRg27ovQSRHJ80K7UN0cE/QZiOw5Ji3YRM0=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/The-Complete-Writings-of-Charles-Dudley-Warner-Volume-2_2672
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy

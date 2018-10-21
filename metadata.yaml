@@ -1,5 +1,5 @@
 _repo: The-Complete-Writings-of-Charles-Dudley-Warner-Volume-2_2672
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -26,6 +26,7 @@ subjects:
 - !lcsh 'Europe -- Description and travel'
 - !lcc 'PS'
 - !lcc 'D'
+- GITenberg
 tableOfContents: Saunterings
 title: The Complete Writings of Charles Dudley Warner — Volume 2
 url: http://www.gutenberg.org/ebooks/2672
